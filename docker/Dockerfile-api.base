@@ -1,0 +1,51 @@
+FROM alpine:3.8
+
+RUN export PYTHONDONTWRITEBYTECODE="" && echo http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories && \
+    apk add --no-cache python3 py3-psycopg2 py3-netifaces bash libstdc++ py3-numpy py3-scipy && \
+    apk add --no-cache supervisor && \
+    apk add --no-cache --virtual .build-deps \
+            curl \
+            linux-headers \
+            py-numpy-dev \
+            openssl-dev \
+            python3-dev \
+            libxml2-dev \
+            xmlsec-dev \
+            autoconf \
+            libtool \
+            automake \
+            clang \
+            make \
+            cmake \
+            flex \
+            bison \
+            git \
+            pkgconf \
+            g++ && \
+    python3 -m ensurepip && \
+    rm -r /usr/lib/python*/ensurepip && \
+    pip3 install --upgrade pip setuptools && \
+    if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi && \
+    if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/python3 /usr/bin/python; fi && \
+    pip3 install --no-cache-dir requests==2.21.0 && \
+    pip3 install --no-cache-dir pandas==0.24.0 && \
+    pip3 install --no-cache-dir sqlparse==0.3.0 && \
+    pip3 install --no-cache-dir python-consul==1.1.0 && \
+    pip3 install --no-cache-dir cassandra-driver==3.17.0 && \
+    pip3 install --no-cache-dir SQLAlchemy==1.3.1 && \
+    pip3 install --no-cache-dir sqlalchemy_utils==0.36.5 && \
+    pip3 install --no-cache-dir protobuf==3.11.1 && \
+    pip3 install --no-cache-dir gunicorn==19.9.0 && \
+    pip3 install --no-cache-dir django==2.1.7 && \
+    pip3 install --no-cache-dir djangorestframework==3.9.2 && \
+    pip3 install --no-cache-dir django-filter==2.1.0 && \
+    pip3 install --no-cache-dir django-cors-headers==2.5.2 && \
+    pip3 install --no-cache-dir Flask==1.1.1 && \
+    pip3 install --no-cache-dir werkzeug==1.0.1 && \
+    pip3 install --no-cache-dir rfc5424-logging-handler==1.4.3 && \
+    rm -r /root/.cache && \
+    mkdir -p /opt/helios/bin && \
+    mkdir -p /opt/helios/config && \
+    mkdir -p /opt/helios/nlp_files/en && \
+    apk del --purge .build-deps && \
+    find /usr -name *.pyc -exec rm -rf {} \;

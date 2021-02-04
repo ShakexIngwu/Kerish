@@ -1,0 +1,12 @@
+{
+    "Name": "postgres",
+    "Checks": [
+        {
+            "CheckID":"postgresHealth",
+            "Name":"postgresHealth TCP 5432",
+            "tcp":"$SYSTEM_POSTGRES_NODE_IP:5432",
+            "interval":"10s",
+            "timeout":"1s"
+        }
+    ]
+}
